@@ -1,0 +1,101 @@
+<% layout('../../admin/layout') -%>
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">SMS 관리 화면</h1>
+        </div>
+    </div>
+    <form name="frm" id="frm" method="post" class="form-horizontal">
+        <input type="hidden" id="no" name="no" value="<%=result.no%>"/>
+        <input type="hidden" id="useYn" name="useYn" value=""/>
+        <div class="form-group form-group-sm form-inline">
+        <table>
+            <tr>
+                <td>
+                    <label for="no">번호</label>
+                </td>
+                <td>
+                    <%= result.no %>
+                </td>
+            <tr>
+                <td>
+                    <label for="fromTelNo">SMS 발송번호</label>
+                </td>
+                <td>
+                    <input type="text" name="fromTelNo" id="fromTelNo" value="<%= result.fromTelNo %>" class="form-control" maxlength="13" size="15"/>
+                    ('-'부호 빼고 11자리번호만 입력하세요)
+                </td>
+            </tr>
+                <td>
+                    <label for="subject">SMS 제목</label>
+                </td>
+                <td>
+                    <input type="text" name="subject" id="subject" value="<%= result.subject %>" class="form-control" maxlength="20" size="55"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="">SMS 내용</label>
+                </td>
+                <td>
+                    <textarea id="content" name="content" style="width:400px; height:300px" class="form-control"><%=result.content%></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="">분류</label>
+                </td>
+                <td>
+                    <select id="type" name="type">
+                        <option value="">선택하세요</option>
+                        <option value="PAY" <%if(result.type=='PAY') {%>selected<%}%>>결제안내</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="">사용여부</label>
+                </td>
+                <td>
+                    <input type="radio" name="smsUseYn" id="smsUseY" value="Y" class="form-control" <%if(result.useYn=='Y'){%>checked<%}%>/>사용
+                    <input type="radio" name="smsUseYn" id="smsUseN" value="N" class="form-control" <%if(result.useYn=='N'){%>checked<%}%>/>사용안함
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" align="right">
+                    <input type="button" id="prevBtn" name="prevBtn" value="리스트 화면" class="form-control"/>&nbsp;
+                    <input type="button" id="submitBtn" name="submitBtn" value="확인" class="form-control"/>
+                </td>
+            </tr>
+        </table>
+       </div>
+    </form>
+</div>
+<script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        $("#content").on("keyup", function(e) {
+           e.preventDefault();
+
+           var len = $("#content").val().length;
+            if(len > 100) {
+                alert("SMS 문자전송수(100자이하)를 초과했습니다.");
+                $("#content").focus();
+            }
+        });
+
+
+        $("#prevBtn").on('click', function() {
+            location.href = "/admin";
+        });
+        $("#submitBtn").on('click', function() {
+            // 라디오버튼
+            $("#useYn").val($("input:radio[name='smsUseYn']:checked").val());
+
+            $("#frm").attr("action", "/admin/sms/edit");
+            $("#frm").submit();
+        });
+    });
+</script>

@@ -1,0 +1,53 @@
+<% layout('../layout') -%>
+<script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>
+<script type="text/javascript">
+    $(function() {
+        // 리스트 버튼 이벤트 처리.
+        $("#prevBtn").on("click", function(e) {
+           e.preventDefault();
+
+            location.href = "/announce";
+        });
+    });
+</script>
+<div id="start">
+    <div class="container">
+
+
+        <!--공지사항 타이틀 시작 -->
+        <div class="animate-box">
+            <h2 class="ubar">커뮤니티</h2>
+            <p class="submenu">
+                <a href="/announce" class="btn btn-subm active">공지사항</a>
+                <a href="/ascenter" class="btn btn-subm">상품 Q&A</a>
+                <a href="/review" class="btn btn-subm">상품후기</a>
+            </p>
+        </div>
+
+
+        <div class="col-md-12">
+            <h3>공지사항</h3>
+            <form id="frm" name="frm">
+                <table border="0" cellspacing="0" width="100%" class="table_style3">
+                    <tr>
+                        <td>번호</td><td><%=result.no%></td>
+                        <td>제목</td><td><%=result.title%></td>
+                        <td>날짜</td><td><%=result.date%></td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td colspan="5">
+                            <%-result.content%>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <!--////---현재 공지사항 끝///////-->
+        <p class="form-group">
+            <div class="col-sm-offset-2 col-sm-10 text-right">
+                <input type="button" id="prevBtn" name="prevBtn" class="btn btn-default" value="리스트"/>&nbsp;
+            </div>
+        </p>
+      </div><!--container-->
+</div>

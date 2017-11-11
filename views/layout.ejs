@@ -1,0 +1,98 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>ADPAY-에이디페이</title>
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+    <meta name="viewport" content="width=device-width" />
+
+    <link rel = "shortcut icon" href = "../images/favicon.ico">
+
+    <!-- Bootstrap  -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="/css/animate.css">
+
+    <!-- Magnific Popup -->
+    <link rel="stylesheet" href="/css/magnific-popup.css">
+
+    <!-- Theme style  -->
+    <link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- Modernizr JS -->
+    <script src="/js/modernizr-2.6.2.min.js"></script>
+    <!-- FOR IE9 below -->
+    <!--[if lt IE 9]>
+    <script src="/js/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+
+
+<div class="adpay-loader"></div>
+
+
+<% include include/nav.ejs %>
+
+<div class="body-wrap">
+    <%-body%>
+</div><!--body-wrap-->
+
+
+<!--배너시작-->
+<!--배너 이미지 사이즈는 400x200px -->
+<div id="product-page" class="bg-grey">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-xs-6">
+                <div class="banner banner-1"><img src="/images/banner-1.jpg" /></div>
+            </div>
+
+            <div class="col-md-4 col-xs-6">
+                <div class="banner banner-2"><img src="/images/banner-2.jpg" /></div>
+            </div>
+
+            <div class="col-md-4 col-xs-12 banner-info" style="background-image: url(/images/banner-adpay.jpg);">
+                <div class="banking-info">
+                    <p>농협: 301-0218-5092-81</p>
+                    <p>국민: 592201-01-655279</p>
+                    <p class="red">예금주: 주식회사 에이디커뮤니케이션</p>
+                </div>
+            </div>
+        </div><!--row-->
+    </div><!--container-->
+</div><!--product-page-->
+<!--배너 끝-->
+
+<% include include/footer.ejs %>
+
+</div><!--include된 nav페이지에 div id="page" 태그닫음-->
+
+<div class="gototop js-top">
+    <a href="#" class="js-gotop"><img src="/images/arrow-up.png" /></a>
+</div>
+
+
+<!-- jQuery -->
+<script src="/js/jquery-1.11.3.min.js"></script>
+<!-- Magnific Popup -->
+<script src="/js/jquery.magnific-popup.min.js"></script>
+<script src="/js/magnific-popup-options.js"></script>
+
+<!-- jQuery Easing -->
+<script src="/js/jquery.easing.1.3.js"></script>
+<!-- Bootstrap -->
+<script src="/js/bootstrap.min.js"></script>
+<!-- Waypoints -->
+<script src="/js/jquery.waypoints.min.js"></script>
+<!-- loader -->
+<script src="/js/jquery.countTo.js"></script>
+
+<!-- Main -->
+<script src="/js/main.js"></script>
+</body>
+</html>

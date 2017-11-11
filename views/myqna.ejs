@@ -1,0 +1,73 @@
+<% layout('./layout') -%>
+<!--////--- 마이페이지 시작  ---////-->
+<div id="fh5co-about-section">
+    <div class="container">
+
+        <!--마이페이지 타이틀 시작 -->
+            <div class="fh5co-heading animate-boxr">
+                <h2 class="ubar">마이페이지</h2>
+                <p class="submenu">
+<%
+    if(session.usrId != null) {
+%>
+                    <a href="/mypage" class="btn btn-subm">서비스이용내역</a>
+                    <a href="/mypage/qna" class="btn btn-subm active">1:1문의내역</a>
+                    <a href="/signup/view" class="btn btn-subm">회원정보수정</a>
+<%
+    }
+%>
+                </p>
+            </div>
+        <!--마이페이지 타이틀 end -->
+
+        <!--////---1:1문의내역 시작///////-->
+        <div class="col-md-12">
+            <div class="desc">
+                <h3>1:1 문의내역</h3>
+                <form id="frm" name="frm">
+                    <table border="0" cellspacing="0" width="100%" class="table_style3">
+                        <tr>
+                            <th width="8%">No</th>
+                            <th>제목</th>
+                            <th>작성날짜</th>
+                            <th width="8%">답변</th>
+                            <th width="14%">답변날짜</th>
+                        </tr>
+<%
+    console.log(">>> rList = " + rList.length);
+       if(rList.length > 0) {
+            rList.forEach(function(item, index) {
+
+%>
+                        <tr>
+                            <td><%=item.num%></td>
+                            <td class="left pdl20"><a href="/mypage/qna/view/<%=item.qNo%>" class="open-popup-link"><%=item.title%></a></td>
+                            <td><%=item.insDt%></td>
+                            <td><%=item.replyYn%></td>
+                            <td><%=item.replyInsDt !=null ? item.replyInsDt : ""%></td>
+                        </tr>
+<%
+            })
+        } else {
+%>
+                        <tr>
+                            <td colspan="5" align="center">
+                                No Data
+                            </td>
+                        </tr>
+<%
+        }
+%>
+                    </table>
+                </form>
+
+            </div>
+        </div>
+
+        <div class="col-md-12 text-right mt20">
+            <a href="/ascenter" class="btn btn-warning wid120">1:1문의하기</a>
+        </div>
+
+        <!--////---1:1문의내역  끝///////-->
+    </div>
+</div>

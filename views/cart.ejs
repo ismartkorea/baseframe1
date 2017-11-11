@@ -1,0 +1,177 @@
+<% layout('./layout') -%>
+<!----- 구매하기 시작  ----->
+<form id="frm1" name="frm1" method="post">
+<div id="start">
+    <div class="container">
+
+        <!--구매하기  타이틀 시작 -->
+        <div class="fh5co-heading animate-box">
+            <h2 class="ubar">서비스 구매</h2>
+            <p class="submenu">
+                <%
+                if(session.usrId != null) {
+                %>
+                <a href="/mypage" class="btn btn-subm">주문내역</a>
+                <a href="/cart" class="btn btn-subm active">장바구니</a>
+                <a href="/mypage/qna" class="btn btn-subm">1:1문의내역</a>
+                <a href="/signup/edit/<%=session.usrNo%>" class="btn btn-subm open-popup-link">회원정보수정</a>
+                <%
+                }
+                %>
+            </p>
+        </div>
+            <input type="hidden" id="productCode" name="productCode" value=""/>
+            <input type="hidden" id="productUniqCode" name="productUniqCode" value=""/>
+            <input type="hidden" id="productDiv" name="productDiv" value=""/>
+            <input type="hidden" id="productPairCodeYn" name="productPairCodeYn" value=""/>
+            <input type="hidden" id="productPairCode" name="productPairCode" value=""/>
+            <input type="hidden" id="cmpltYn" name="cmpltYn" value=""/>
+            <input type="hidden" id="prevOrderNo" name="prevOrderNo" value=""/>
+            <input type="hidden" id="useTermDays" name="useTermDays" value=""/>
+            <input type="hidden" id="remainDays" name="remainDays" value=""/>
+            <input type="hidden" id="usedDays" name="usedDays" value=""/>
+            <input type="hidden" id="remainPrice" name="remainPrice" value=""/>
+            <input type="hidden" id="subtractPrice" name="subtractPrice" value=""/>
+            <input type="hidden" id="dcntPercent" name="dcntPercent" value=""/>
+            <!--1. 장바구니 시작 -->
+            <div class="col-md-12 animate-box mb40 pdrl0m">
+                <h3>장바구니</h3>
+
+                <table id="allTbl2" border="0" cellspacing="0" width="100%" class="table_style3 bd">
+                    <colgroup>
+                        <col width="15%">
+                        <col width="10%">
+                        <col>
+                        <col width="15%">
+                        <col width="15%">
+                        <col width="10%">
+                        <col width="8%">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>서비스(상품)번호</th>
+                        <th>서비스(상품)구분</th>
+                        <th>서비스(상품)명</th>
+                        <th>서비스(상품)가격</th>
+                        <th>서비스(상품)합계가격</th>
+                        <th>신청일수(수량)</th>
+                        <th><input type="image" id="cartAllDelBtn" name="cartAllDelBtn" src="/images/remove.png" class="remove" vlaue="삭제"/></th>
+                    </tr>
+                    </thead>
+                    <tbody id="tList1">
+                    <%
+                    if(rList1.length > 0) {
+                    rList1.forEach(function(item, index1) {
+                    if(item.pDiv == "M") {
+                    %>
+                    <tr>
+                        <td colspan="7" class="pdno">
+                            <!-- -->
+                            <table border="0" cellspacing="0" width="100%" class="table_style0 bgc2 bbno">
+                                <colgroup>
+                                    <col width="15%">
+                                    <col width="10%">
+                                    <col>
+                                    <col width="15%">
+                                    <col width="15%">
+                                    <col width="10%">
+                                    <col width="8%">
+                                </colgroup>
+                                <%
+                                }
+                                %>
+                                <tr>
+                                    <td><%=item.pCode%><input type="hidden" id="1pCode<%=index1%>" name="1pCode" value="<%=item.pCode%>"/></td>
+                                    <td><%=item.pDivNm%><input type="hidden" id="1pDiv<%=index1%>" name="1pDiv" value="<%=item.pDiv%>"/></td>
+                                    <td><%=item.pNm%><input type="hidden" id="1pUniqCode<%=index1%>" name="1pUniqCode" value="<%=item.pUniqCode%>"/></td>
+                                    <td><%=fnComma(item.pPrice)%> 원
+                                        <input type="hidden" id="1orderNo<%=index1%>" name="1orderNo" value="<%=item.orderNo%>"/>
+                                        <input type="hidden" id="1pPrice<%=index1%>" name="1pPrice" value="<%=item.pPrice%>"/>
+                                        <input type="hidden" id="1pPairCodeYn<%=index1%>" name="1pPairCodeYn" value="<%=item.pPairCodeYn%>"/>
+                                        <input type="hidden" id="1pPairCode<%=index1%>" name="1pPairCode" value="<%=item.pPairCode%>"/>
+                                        <input type="hidden" id="1pPoptCnt<%=index1%>" name="1pPoptCnt" value="<%=item.optCnt%>"/>
+                                        <input type="hidden" id="1useTermDays<%=index1%>" name=1useTermDays" value="<%=item.useTermDays%>"/>
+                                        <input type="hidden" id="1pCount<%=index1%>" name=1pCount" value="<%=item.pCount !=null ? item.pCount : 0%>"/>
+                                    </td>
+                                    <td>
+                                        <%
+                                        if(item.totalPrice !=null && item.totalPrice != '') {
+                                        %>
+                                        <%=fnComma(item.totalPrice)%> 원
+                                        <%
+                                        }
+                                        %>
+                                    </td>
+                                    <td>
+                                        <%
+                                        if(item.pDiv == "M") {
+                                        if(item.pType == "HDW") {
+                                        %>
+                                        <%=item.pCount !=null ? item.pCount : 0%> 개
+                                        <%
+                                        } else  {
+                                        %>
+                                        <%=item.useTermDays !=null ? item.useTermDays : 0%> 일
+                                        <%
+                                        }
+                                        }
+                                        %>
+                                    </td>
+                                    <td>
+                                        <%
+                                        if(item.pDiv == "M") {
+                                        %>
+                                        <input type="image" id="delBtn<%=index1%>" name="delBtn" src="/images/remove.png" class="remove" value="삭제"/>
+                                        <%
+                                        }
+                                        %>
+                                    </td>
+                                </tr>
+                                <%
+                                if(item.pDiv == "M") {
+                                %>
+                            </table>
+                            <!-- -->
+                        </td>
+                    </tr>
+                    <%
+                    }
+                    });
+                    }
+                    %>
+                    </tbody>
+                    <tr>
+                        <td colspan="7" class="pdt10 pdbno bbdno">
+
+                                <div class="text-center">
+                                    <h3>결제예정금액: <span class="pricetext"><input type="text" id="totalCalPayPrice" name="totalCalPayPrice" value="<%=price !=null ? fnComma(price) : 0%>" class="size13hh" readonly/></span>원</h3>
+                                </div>
+
+
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="5" class="left backno bbdno pdb5 pdt10"><a href="#" id="saveBtn" class="btn btn-default btnwide100 pdtb15">바로구매</a></td>
+                        <td colspan="2" class="left backno bbdno pdb5 pdt10"><a href="#" id="serviceBtn" class="btn btn-green btnwide100 pdtb15">서비스안내로 돌아가기</a></td>
+                    </tr>
+                </table>
+                <!-- 배송 정보 입력 여부 -->
+                <div class="mt30 mb0">
+                    * 배송 정보가 있습니까?
+                    <div class="dispinline">
+                        <input type="radio" id="shippingUseY" name="pShippingUseYn" value="Y"/><label for="" ><span><span></span></span> 예 </label>
+                        <input type="radio" id="shippingUseN" name="pShippingUseYn" value="N" checked/><label for="" ><span><span></span></span> 아니오 </label>
+                    </div>
+                </div>
+                <!-- 배송 정보 입력 여부 -->
+            </div>
+        </div>
+    </div>
+</form>
+<script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>
+<script type="text/javascript">
+    $(function() {
+
+    });
+</script>

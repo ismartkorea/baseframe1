@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title><%=title%> 관리자 멤버가입 화면</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="/admin/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="/admin/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="/admin/css/sb-admin-2.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="/admin/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <div class="login-panel panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">관리자 추가</h3>
+                </div>
+                <div class="panel-body">
+                    <form role="form" id="frm" name="frm">
+                        <fieldset>
+                            <div class="form-group">
+                                아이디  : <input class="form-control" placeholder="아이디" id="usrId" name="usrId" type="text" autofocus>
+                            </div>
+                            <div class="form-group">
+                                패스워드 : <input class="form-control" placeholder="패스워드" id="usrPwd" name="usrPwd" type="password" value="">
+                            </div>
+                            <div class="form-group">
+                                패스워드 확인 : <input class="form-control" placeholder="패스워드" id="usrPwd2" name="usrPwd2" type="password" value="">
+                            </div>
+                            <div class="form-group">
+                                이메일 : <input class="form-control" placeholder="이메일" id="usrEmail" name="usrEmail" type="text" value="">
+                            </div>
+                            <div class="form-group">
+                                이름 : <input class="form-control" placeholder="이름" id="usrName" name="usrName" type="text" value="">
+                            </div>
+                            <div class="form-group">
+                                <a href="/admin/login">로그인 화면</a>
+                            </div>
+                            <!-- Change this to a button or input when using this as a form -->
+                            <a href="javascript:onSubmit();" class="btn btn-lg btn-success btn-block">추가</a>
+                        </fieldset>
+                    </form>
+                </div>
+                <div id="msgDiv" style="text-align:center;color:red;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- jQuery -->
+<script src="/admin/vendor/jquery/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="/admin/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Metis Menu Plugin JavaScript -->
+<script src="/admin/vendor/metisMenu/metisMenu.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="/admin/js/sb-admin-2.js"></script>
+
+<!-- script -->
+<script type="text/javascript">
+    $(function() {
+
+    });
+
+
+    // 전송처리.
+    var onSubmit = function() {
+        var usrId = $.trim($("#usrId").val());
+        var usrPwd = $.trim($("#usrPwd").val());
+        var usrPwd2 = $.trim($("#usrPwd2").val());
+        var usrEmail = $.trim($("#usrEmail").val());
+        var usrName = $.trim($("#usrName").val());
+
+        if (usrId == "") {
+            alert("아이디는 필수 입력항목입니다.");
+            $("#usrEmail").focus();
+
+            return false;
+        }
+
+        if (usrPwd == "") {
+            alert("패스워드는 필수 입력항목입니다.");
+            $("#usrPwd").focus();
+
+            return false;
+        }
+
+        if (usrPwd2 == "") {
+            alert("패스워드 확인을 위해 입력하여 주세요.");
+            $("#usrPwd2").focus();
+
+            return false;
+        }
+
+        if (usrPwd != usrPwd2) {
+            alert("비밀번호를 확인해주세요.");
+            $("#usrPwd2").val("");
+            $("#usrPwd2").focus();
+
+            return false;
+        }
+
+        if (usrEmail == "") {
+            alert("이메일은 필수 입력항목입니다.");
+            $("#usrEmail").focus();
+
+            return false;
+        }
+
+        if (usrName == "") {
+            alert("이름은 필수 입력항목입니다.");
+            $("#usrName").focus();
+
+            return false;
+        }
+
+        $("#frm").attr("method", "post");
+        $("#frm").attr("action", "/admin/signup");
+
+        $("#frm").submit();
+        /*
+        var dataValue = {'usrId': usrId, 'usrPwd': usrPwd, 'usrEmail': usrEmail, 'usrName' : usrName};
+        $.ajax({
+            type: "post",
+            url: "/admin/signup",
+            dataType: "json",
+            data: dataValue,
+            success: function (data) {
+                if (data) {
+                    $("#msgDiv").text(data.message);
+                }
+            },
+            error: function (request, status, error) {
+                console.log("Code :  " + request.status + "\n" +
+                        "message : " + request.responseText + "\n" +
+                        "error : " + error);
+                if (request.status == '401' || request.status == '500') {
+                    $("#msgDiv").text(request.responseText);
+                }
+            }
+        });
+        */
+    }
+</script>
+
+</body>
+
+</html>

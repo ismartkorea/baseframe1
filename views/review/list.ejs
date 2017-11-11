@@ -1,0 +1,58 @@
+<% layout('../layout') -%>
+<script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>
+<div id="start">
+    <div class="container">
+
+        <!--공지사항 타이틀 시작 -->
+        <div class="animate-box">
+            <h2 class="ubar">커뮤니티</h2>
+            <p class="submenu">
+                <a href="/announce" class="btn btn-subm active">공지사항</a>
+                <a href="/ascenter" class="btn btn-subm">상품 Q&A</a>
+                <a href="/review" class="btn btn-subm">상품후기</a>
+            </p>
+        </div>
+
+        <div class="col-md-12 animate-box mb40">
+            <h3>상품 후기</h3>
+            <form id="frm" name="frm">
+                <table border="0" cellspacing="0" width="100%" class="table_style3">
+                    <thead>
+                    <tr>
+                        <th>번호</th>
+                        <th>제목</th>
+                        <th>날짜</th>
+                        <th>조회수</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+<%
+    if(rList.length > 0) {
+        rList.forEach(function(item, index) {
+%>
+                    <tr>
+                        <td><%=item.no%></td>
+                        <td><a href="/review/view/<%=item.no%>"><%=item.title%></a></td>
+                        <td><%=item.date%></td>
+                        <td><%=item.count%></td>
+                    </tr>
+<%
+        })
+    } else {
+%>
+                    <tr>
+                        <td colspan="4" align="center">
+                            No Data
+                        </td>
+                    </tr>
+<%
+    }
+%>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+        <!--////---현재 공지사항 끝///////-->
+
+    </div><!--container-->
+</div>

@@ -1,0 +1,158 @@
+<% layout('./layout') -%>
+<!----- FAQ /// 1:1문의  시작  ----->
+<div id="start">
+    <div class="container">
+
+        <!--고객센터 타이틀 시작 -->
+        <div class="animate-box">
+            <h2 class="ubar">커뮤니티</h2>
+            <p class="submenu">
+                <a href="/announce" class="btn btn-subm">공지사항</a>
+                <a href="/ascenter" class="btn btn-subm">상품 Q&A</a>
+                <a href="/review" class="btn btn-subm">상품후기</a>
+            </p>
+        </div>
+
+        <!--고객센터 타이틀 end -->
+
+
+        <!--1:1문의하기 시작--->
+
+        <div class="col-md-12 animate-box">
+            <h3>1:1문의하기</h3>
+            <form id="frm" name="frm">
+                <input type="hidden" id="usrId" name="usrId" value="<%=session.usrId !=null ? session.usrId : ""%>"/>
+                <div class="row form-group">
+                    <div class="col-md-12">
+                        <!-- <label for="name">이름</label> -->
+                        <input type="text" id="name" name="name" class="form-control" maxlength="40" placeholder="이름 또는 업체명" value="<%=session.usrName !=null ? session.usrName : ""%>">
+                    </div>
+                </div>
+
+                <div class="row form-group">
+                    <div class="col-md-12">
+                        <!-- <label for="email">이메일주소</label> -->
+                        <input type="text" id="email" id="email" class="form-control" maxlength="80" placeholder="이메일주소(입력하신 이메일주소로 회신이 갑니다)">
+                    </div>
+                </div>
+
+                <div class="row form-group">
+                    <div class="col-md-12">
+                        <!-- <label for="email">전화번호</label> -->
+                        <input type="text" id="telNo" name="telNo" class="form-control" maxlength="13" placeholder="전화번호를 -를 포함하여 입력 해 주세요 (예: 010-1234-5432)">
+                    </div>
+                </div>
+
+                <div class="row form-group">
+                    <div class="col-md-12">
+                        <!-- <label for="subject">제목</label> -->
+                        <input type="text" id="title" name="title" class="form-control" maxlength="80" placeholder="제목">
+                    </div>
+                </div>
+
+                <div class="row form-group">
+                    <div class="col-md-12">
+                        <!-- <label for="message">문의내용</label> -->
+                        <textarea name="message" id="content" name="content" cols="30" rows="10" maxlength="2000" class="form-control" placeholder="문의내용"></textarea>
+                    </div>
+                </div>
+                <div class="form-group text-center">
+                    <input type="button" id="submitBtn" value="전송하기" class="btn btnwide btn-warning mt10">
+                </div>
+
+            </form>
+        </div><!--1:1문의하기 끝--->
+
+    </div>
+</div><!----- FAQ  //// 1:1문의 end  ----->
+<script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>
+<!-- ckeditor -->
+<script src="/ckeditor/ckeditor.js"></script>
+<script type="text/javascript">
+    var emailRegExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+    var telNoRegExp = /^\d{2,3}-\d{3,4}-\d{4}$/;
+    $(function() {
+
+        // CKEditor 설정.
+        CKEDITOR.replace("content", {
+            toolbar : "Basic"
+        });
+
+        // 전송 버튼 이벤트 처리.
+        $("#submitBtn").on("click", function(e) {
+            e.preventDefault();
+
+            var guestNm = $.trim($("#name").val());
+            var guestUsrId = $.trim($("#usrId").val());
+            var guestEmail = $.trim($("#email").val());
+            var guestTelNo = $.trim($("#telNo").val());
+            var guestTitle = $.trim($("#title").val());
+            var guestContent = $.trim(CKEDITOR.instances.content.getData());
+
+            if(guestNm=="") {
+                alert("이름 또는 업체명을 입력하세요");
+                $("#name").focus();
+                return false;
+            }
+            if(guestEmail=="") {
+                alert("이메일을 입력하세요");
+                $("#email").focus();
+                return false;
+            }
+            if(guestTelNo=="") {
+                alert("연락처를 입력하세요");
+                $("#telNo").focus();
+                return false;
+            }
+            if(guestTitle=="") {
+                alert("제목을 입력하세요");
+                $("#title").focus();
+                return false;
+            }
+            if(guestContent=="") {
+                alert("문의 내용을 입력하세요");
+                $("#content").focus();
+                return false;
+            }
+            // Validation 체크.
+            if(!emailRegExp.test(guestEmail)) {
+                alert("올바른 이메일 형식이 아닙니다.\n확인하시고 다시 입력하세요");
+                ("#email").focus();
+                return false;
+            }
+            if(!telNoRegExp.test(guestTelNo)) {
+                alert("올바른 전화 형식이 아닙니다.\n확인하시고 다시 입력하세요.");
+                $("#telNo").focus();
+                return false;
+            }
+
+            var dataVals = {
+                'name' : guestNm,
+                'usrId' : guestUsrId,
+                'email' : guestEmail,
+                'telNo' : guestTelNo,
+                'title' : guestTitle,
+                'content' : guestContent
+            };
+            // 전송 처리.
+            $.ajax({
+                url: "/ascenter/save",
+                type: "post",
+                dataType: "json",
+                data: dataVals,
+                success: function (data) {
+                    console.log(">>> data = " + data.result);
+                    if(data.result=="OK") {
+                        alert("전송처리하였습니다.");
+                        $("form")[0].reset();
+                        CKEDITOR.instances.content.setData("");
+                    }
+                },
+                error: function (err) {
+                    alert("errCode : " + err.message);
+                }
+            });
+
+        });
+    });
+</script>

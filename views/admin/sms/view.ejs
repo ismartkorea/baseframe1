@@ -1,0 +1,55 @@
+<% layout('../../admin/layout') -%>
+<div id="wrapper">
+    <form name="frm" id="frm" method="post">
+        <input type="hidden" id="no" name="no" value="<%=result.no%>"/>
+        <table style="margin: 0 auto">
+            <tr>
+                <td>
+                    <label for="">번호</label>
+                </td>
+                <td>
+                    <%= result.no %>
+                </td>
+                <td>
+                    <label for="">제목</label>
+                </td>
+                <td>
+                    <%= result.subject %>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="">작성자</label>
+                </td>
+                <td>
+                    <%=result.insId%>
+                </td>
+                <td>
+                    <label for="">작성날짜</label>
+                </td>
+                <td>result.date</td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="">글 내용</label>
+                </td>
+                <td>
+                    <%-result.content%>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6" style="align : center; height : 20px">
+                    <input type="button" id="prevBtn" name="prevBtn" value="리스트 화면"/>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#prevBtn").on('click', function() {
+            location.href = "/admin";
+        });
+    });
+</script>

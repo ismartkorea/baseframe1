@@ -1,0 +1,119 @@
+<% layout('./layout') -%>
+<%
+// 콤마 붙이기
+function fnComma(num) {
+    var reg = /(^[+-]?\d+)(\d{3})/;
+    num += '';
+    while(reg.test(num)) {
+        num = num.replace(reg, '$1' + ',' + '$2');
+    }
+    return num;
+}
+// 콤마 제거
+function fnUnComma(num) {
+    return (num.replace(/\,/g,""));
+}
+%>
+<div id="product-page" class="bg">
+    <div class="container">
+        <div class="product-list-main">
+
+            <!--베스트 시작-->
+            <div class="row">
+                <div class="col-md-12">
+                    <h3><span class="orange"><img src="/images/best.png" alt="베스트 온라인게임"></span> 베스트 온라인</h3>
+                </div>
+<%
+        var num1 = 1;
+        if(rList1.length > 0) {
+            rList1.forEach(function(item1, index) {
+                if(index == 0) {
+%>
+                <div class="col-md-3 col-xs-12 thumb-1st">
+                    <a href="/purchase/<%=item1.pCode%>/<%=item1.pUniqCode%>">
+                        <img src="/images/product/<%=item1.pImage%>">
+                    </a>
+                    <div class="best-tag">1</div>
+                    <p><span class="red">1위</span><%=item1.pNm%></p>
+                </div>
+
+                <div class="col-md-9 col-xs-12 thumb-best-list">
+                    <div class="col-md-12">
+<%
+                }
+                if(index > 0) {
+                    num1 = num1 +1;
+%>
+                        <div class="col-md-2 col-sm-4 col-xs-6 thumb">
+                            <a href="/purchase/<%=item1.pCode%>/<%=item1.pUniqCode%>">
+                                <img src="/images/product/<%=item1.pImage%>">
+                            </a>
+                            <p><span class="red"><%=num1%>위</span><%=item1.pNm%></p>
+                            <%if(num1 <= 7) {%><div class="best-tag"><%=num1%></div><%}%>
+                        </div>
+<%
+                }
+            });
+        }
+%>
+                    </div>
+                </div>
+
+            </div><!--row-->
+        </div><!--product-list-main-->
+    </div><!--container-->
+</div><!--product-page-->
+
+<div id="product-page">
+    <div class="container">
+        <div class="service-list">
+            <!--검색 시작-->
+            <div class="row">
+                <div class="col-md-12 col-sm-12 mb10 mt20 text-center">
+                    <h3 class="frame text-center">검색결과</h3>
+                </div>
+            </div><!--row-->
+            <!--검색 끝-->
+
+            <!--상품 리스트 시작-->
+            <div class="row mt10">
+<%
+    if(rList2.length > 0) {
+        rList2.forEach(function(item, idx) {
+%>
+                <div class="col-md-3 col-sm-4 col-xs-6 animate-box">
+                    <div class="feature-center">
+                        <div class="thumb">
+                            <a href="/purchase/<%=item.pCode%>/<%=item.pUniqCode%>"><img src="/images/product/thumb/<%=item.pImage%>"></a>
+                            <h3><%=item.pNm%></h3>
+                            <p class="original">가격: <%=fnComma(item.pPrice)%> 원</p>
+                            <p>할인가: <span class="orange"><%=fnComma(item.pDiscPrice)%></span> 원</p>
+                        </div>
+                    </div>
+                </div>
+<%
+        });
+    } else {
+%>
+                <div class="col-md-3 col-sm-4 col-xs-6 animate-box">
+                    NO DATA
+                </div>
+<%
+    }
+%>
+
+            </div><!--row-->
+
+
+        </div><!--service-list-->
+        <!--상품목록 끝-->
+    </div><!--container-->
+</div><!--product-page-->
+<!-- script -->
+<script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>
+<script type="text/javascript">
+    $(function() {
+
+    });
+</script>
+<!-- script -->

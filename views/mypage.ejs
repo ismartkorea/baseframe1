@@ -1,0 +1,111 @@
+<% layout('./layout') -%>
+<%
+// 콤마 붙이기
+function fnComma(num) {
+    var reg = /(^[+-]?\d+)(\d{3})/;
+    num += '';
+    while(reg.test(num)) {
+        num = num.replace(reg, '$1' + ',' + '$2');
+    }
+    return num;
+}
+// 콤마 제거
+function fnUnComma(num) {
+    return (num.replace(/\,/g,""));
+}
+%>
+<!--////--- 마이페이지 시작  ---////-->
+<div id="start">
+    <div class="container">
+
+        <!--마이페이지 타이틀 시작 -->
+        <div class="fh5co-heading animate-box">
+            <h2 class="ubar">마이페이지</h2>
+            <p class="submenu">
+<%
+    if(session.usrId != null) {
+%>
+                <a href="/mypage" class="btn btn-subm active">주문내역</a>
+                <a href="/mypage/qna" class="btn btn-subm">1:1문의/답변</a>
+                <a href="/signup/view" class="btn btn-subm">회원정보수정</a>
+<%
+    }
+%>
+            </p>
+        </div>
+        <!--마이페이지 타이틀 end -->
+
+        <!--////--- 현재 서비스내역 시작///////-->
+        <div class="col-md-12 animate-box mb40">
+
+                <h3>주문내역</h3>
+                <form id="frm" name="frm">
+                    <table border="0" cellspacing="0" width="100%" class="table_style3 mtm10">
+                        <thead>
+                        <tr>
+                            <th>결제번호</th>
+                            <th>총결제금액</th>
+                            <th>결제수단</th>
+                            <th>결제날짜</th>
+                            <th>상태</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+<%
+    if(rList1.length > 0) {
+        rList1.forEach(function(item, index) {
+%>
+                        <tr>
+                            <td><a href="/mypage/paid/view/<%=item.payCode%>" class="open-popup-link btn btn-small-grey"><%=item.payCode%></a></td>
+                            <td><%=fnComma(item.pTotalPrice)%> 원</td>
+                            <td><%=item.payMethod%></td>
+                            <td><%=item.payDate%></td>
+                            <% if(item.payResult == 'paid' && item.refundReqYn == 'N') { %>
+                            <td><a href="/mypage/service/refund/view/<%=item.orderNo%>" class="open-popup-link btn btn-small-grey"><%=item.payResult%></a></td>
+                            <% } else { %>
+                            <td><%=item.payResult%></td>
+                            <% } %>
+                        </tr>
+<%
+        })
+    } else {
+%>
+                        <tr>
+                            <td colspan="9" align="center">
+                                No Data
+                            </td>
+                        </tr>
+<%
+    }
+%>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td colspan="7">
+                                <ul>
+                                    <li><span class="red">입금계좌정보: 우리은행 00-123453-12-135 예금주: 에이디페이</span></li>
+                                    <li><span class="red">주문자와 입금자명이 같아야 빠른 처리가 가능합니다.</span></li>
+                                    <li>주문상태가 '입금확인'인 경우 10분 이내에 문자가 발송 됩니다.</li>
+                                    <li>주문상태가 '입금대기'인 경우 만 3일이내 입금확인이 없으면 자동취소처리가 됩니다.</li>
+                                    <li>주문상태가 '취소요청'인 경우 주말제외 만 1일이내에 환불처리가 됩니다.</li>
+
+                                </ul>
+                            </td>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </form>
+
+
+        </div>
+        <!--////---현재 서비스내역 끝///////-->
+
+    </div>
+</div>
+<!--////--- 마이페이지 끝  ---////-->
+<script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>
+<script type="text/javascript">
+    $(function() {
+
+    });
+</script>

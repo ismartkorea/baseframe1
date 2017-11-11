@@ -1,0 +1,61 @@
+<% layout('../layout') -%>
+<script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>
+<div class="container">
+    <div class="row">
+        <div id="fh5co-section" class="animate-box">
+            <div class="col-nineth">
+                <div class="row">
+
+                    <!--이벤트 타이틀 시작 -->
+                    <div class="fh5co-heading animate-box">
+                        <h2 class="ubar">이벤트</h2>
+                    </div>
+                    <!--////--- 현재 이벤트 시작///////-->
+
+                    <div class="col-md-12">
+                        <div class="desc">
+                            <form id="frm" name="frm">
+                                <table border="0" cellspacing="0" width="100%" class="table_style3">
+                                    <thead>
+                                    <tr>
+                                        <th>번호</th>
+                                        <th>제목</th>
+                                        <th>날짜</th>
+                                        <th>조회수</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+<%
+    if(rList.length > 0) {
+        rList.forEach(function(item, index) {
+%>
+                                    <tr>
+                                        <td><%=item.no%></td>
+                                        <td><a href="/event/view/<%=item.no%>"><%=item.title%></a></td>
+                                        <td><%=item.date%></td>
+                                        <td><%=item.count%></td>
+                                    </tr>
+<%
+        })
+    } else {
+%>
+                                    <tr>
+                                        <td colspan="3" align="center">
+                                            No Data
+                                        </td>
+                                    </tr>
+<%
+    }
+%>
+                                    </tbody>
+                                </table>
+                            </form>
+                        </div>
+                    </div>
+                    <!--////---현재 이벤트 끝///////-->
+
+                </div><!--row-->
+            </div>
+        </div>
+    </div>
+</div>

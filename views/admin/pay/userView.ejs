@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>고객정보 조회결과 화면.</title>
+    <link rel="stylesheet" href="/css/join.css">
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            // 닫기 버튼 이벤트 처리.
+            $("#closeBtn").on("click",function(e) {
+                e.preventDefault();
+                self.close();
+            });
+        });
+    </script>
+</head>
+<!--팝업창크기는 css/magnific-popup.css에 mfp-iframe-scaler2 클래스에 지정되어있음-->
+<body>
+
+<div id="content">
+    <form id="frm" name="frm">
+        <div id="join">
+            <h1 class="tit-join">고객 조회</h1>
+
+            <!-- 일반회원 기본 노출 -->
+            <table  border="0" cellspacing="0" width="100%" class="table_style11">
+                <colgroup>
+                    <col width="100"/><col width="*">
+                </colgroup>
+                <tr>
+                    <th>
+                        <span class="red">*</span> 고객 번호
+                    </th>
+                    <td>
+                        <%=result.cNo%>
+                    </td>
+                    <th>
+                        <span class="red">*</span> 고객 명
+                    </th>
+                    <td>
+                        <%=result.cName%>
+                    </td>
+                    <th>
+                        <span class="red">*</span> 고객 ID
+                    </th>
+                    <td>
+                        <%=result.cId%>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <span class="red">*</span> 이메일
+                    </th>
+                    <td>
+                        <%=result.cEmail%>
+                    </td>
+                    <th>
+                        <span class="red">*</span> 전화번호
+                    </th>
+                    <td>
+                        <%=result.cTelNo%>
+                    </td>
+                    <th>
+                        <span class="red">*</span> 휴대폰번호
+                    </th>
+                    <td colspan="3">
+                        <%=result.cCellNo%>
+                    </td>
+                </tr>
+            </table>
+            <!-- #personInfo -->
+
+            <div class="btn-area" align="center">
+                <a id="closeBtn" href="#" class="mfp-close">닫기</a>
+            </div>
+        </div>
+    </form>
+</div><!-- #join -->
+</body>
+</html>

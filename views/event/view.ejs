@@ -1,0 +1,54 @@
+<% layout('../layout') -%>
+<script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>
+<script type="text/javascript">
+    $(function() {
+        // 리스트 버튼 이벤트 처리.
+        $("#prevBtn").on("click", function(e) {
+            e.preventDefault();
+
+            location.href = "/event";
+        });
+    });
+</script>
+<div class="container">
+    <div class="row">
+        <div id="fh5co-section" class="animate-box">
+            <div class="col-nineth">
+                <div class="row">
+
+                    <!--이벤트 타이틀 시작 -->
+                    <div class="fh5co-heading animate-box">
+                        <h2 class="ubar">이벤트</h2>
+                    </div>
+                    <!--////--- 현재 이벤트 시작///////-->
+
+                    <div class="col-md-12">
+                        <div class="desc">
+                            <form id="frm" name="frm">
+                                <table border="0" cellspacing="0" width="100%" class="table_style3">
+                                    <tr>
+                                        <td>번호</td><td><%=result.no%></td>
+                                        <td>제목</td><td><%=result.title%></td>
+                                        <td>날짜</td><td><%=result.date%></td>
+                                    </tr>
+                                    <tr>
+                                        <td>&nbsp;</td>
+                                        <td colspan="5">
+                                            <%-result.content%>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </form>
+                        </div>
+                    </div>
+                    <!--////---현재 이벤트 끝///////-->
+                    <p class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10 text-right">
+                        <input type="button" id="prevBtn" name="prevBtn" class="btn btn-default" value="리스트"/>&nbsp;
+                    </div>
+                    </p>
+                </div><!--row-->
+            </div>
+        </div>
+    </div>
+</div>

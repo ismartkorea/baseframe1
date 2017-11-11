@@ -1,0 +1,398 @@
+<% layout('../../admin/layout') -%>
+<style type="text/css">
+    .mark_red {
+        color : red;
+        font-size: 5px;
+    }
+    .mark_blue {
+        color : blue;
+        font-size: 20px;
+        vertical-align: top;
+    }
+</style>
+<script type="text/javascript" src="/admin/vendor/jquery/jquery.js"></script>
+<script type="text/javascript" src="https://spi.maps.daum.net/imap/map_js_init/postcode.v2.js"></script>
+<script type="text/javascript">
+    var emailRegExp = /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+    var cellNoRegExp = /^\d{3}-\d{3,4}-\d{4}$/;
+    var telNoRegExp = /^\d{2,3}-\d{3,4}-\d{4}$/;
+    var idRegExp = /^[a-z0-9_]{4,20}$/;
+    $(document).ready(function() {
+        // init 초기화 처리.
+        var idCheck = false;
+        var emailCheck = false;
+        // 우편번호 검색 팝업창 호출 이벤트 처리.
+        $("#srchPostNoBtn1").bind("click",function() {
+            execDaumPostcode('1');
+        });
+        $("#srchPostNoBtn2").bind("click",function() {
+            execDaumPostcode('2');
+        });
+
+        // 이메일 '직접입력' 선택시 처리.
+        $("#usrEmail2").on("change", function() {
+            if($("#usrEmail2 option:selected").val()=="direct") {
+                $("#usrEmail3").attr("readonly",false);
+            } else {
+                $("#usrEmail3").val("");
+                $("#usrEmail3").attr("readonly",true);
+            }
+        });
+
+        // 주소카피 버튼 이벤트 처리
+        $("#copyBtn").on("click", function() {
+            if($("#copyBtn").prop("checked")) {
+                $("#usrCompPostNo").val($("#usrPostNo").val());
+                $("#usrCompAddr1").val($("#usrAddr1").val());
+                $("#usrCompAddr2").val($("#usrAddr2").val());
+            } else {
+                $("#usrCompPostNo").val("");
+                $("#usrCompAddr1").val("");
+                $("#usrCompAddr2").val("");
+            }
+        });
+
+        // 아이디 중복 체크 버튼 이벤트 처리.
+        $("#idChkBtn").on("click",function() {
+
+            if($("#usrId").val() == null || $("#usrId").val() == "") {
+                alert("아이디를 입력하세요.");
+                $("#usrId").focus();
+                return false;
+            }
+
+            if(!idRegExp.test($("#usrId").val())) {
+                alert("올바른 아이디가 아닙니다.\n 다시 확인하시고 입력하세요.");
+                $("#usrId").focus();
+                return false;
+            }
+
+            // 값 저장 처리.
+            var dataVals = {
+                usrId : $.trim($("#usrId").val()),
+            };
+            // 전송 처리.
+            $.ajax({
+                url: "/common/idCheckProcess",
+                type: "post",
+                dataType: "json",
+                data: dataVals,
+                success: function (data) {
+                    if(data.result > 0) {
+                        idCheck = false;
+                        alert("이미 사용중인 아이디가 있습니다.");
+                        $("#usrId").focus();
+                    } else {
+                        idCheck = true;
+                        alert("사용가능한 아이디 입니다.");
+                        $("#usrId").attr("readonly",true);
+                        $("#usrPwd1").focus();
+                    }
+                },
+                error: function (err) {
+                    alert("errCode : " + err.status);
+                }
+            });
+        });
+
+        // 이메일 중복 체크 버튼 이벤트 처리.
+        $("#emailChkBtn").on("click",function() {
+            var usrEmail;
+            // 이메일2 값 취득.
+            var usrEmail1 = $.trim($("#usrEmail1").val());
+            var usrEmail2 = $.trim($("#usrEmail2 option:selected").val());
+
+            if(usrEmail1 == "") {
+                alert("이메일 아이디를 입력하여 주세요.");
+                $("#usrEmail1").focus();
+                return false;
+            }
+            if(usrEmail2 == "") {
+                alert("이메일 주소를 선택하여 주세요.");
+                $("#usrEmail2").focus();
+                return false;
+            } else {
+                if(usrEmail2 == "direct") {
+                    if($("#usrEmail3").val()==null || $("#usrEmail3").val()=="") {
+                        alert("이메일 주소를 입력하여 주세요.");
+                        $("#usrEmail3").focus();
+                        return false;
+                    }
+                }
+
+            }
+            // 값셋팅.
+            if(usrEmail1 != "" && usrEmail2 != "direct") {
+                usrEmail = usrEmail1 + "@" + usrEmail2;
+            } if(usrEmail1 != "" && usrEmail2 == "direct") {
+                if($("#usrEmail3").val() != null || $("#usrEmail3").val() != "") {
+                    usrEmail = usrEmail1 + "@" + usrEmail3;
+                }
+            }
+            // 이메일 상세 체크.
+            if(!emailRegExp.test(usrEmail)) {
+                alert("올바른 이메일이 아닙니다. 다시 입력하여 주세요.");
+                $("#usrEmail1").focus();
+                return false;
+            }
+
+            // 값 저장 처리.
+            var dataVals = {
+                usrEmail : usrEmail
+            };
+            // 전송 처리.
+            $.ajax({
+                url: "/common/emailCheckProcess",
+                type: "post",
+                dataType: "json",
+                data: dataVals,
+                success: function (data) {
+                    console.log(">>> data = " + data.result);
+                    if(data.result > 0) {
+                        alert("이미 사용중인 이메일이 있습니다.");
+                        $("#usrEmail1").focus();
+                    } else {
+                        emailCheck = true;
+                        alert("사용가능한 이메일 입니다.");
+                        $("#usrEmail1").attr("readonly",true);
+                        $("#usrEmail2").attr("disabled",true);
+                        $("#usrEmail3").attr("readonly",true);
+                    }
+                },
+                error: function (err) {
+                    alert("errCode : " + err.status);
+                }
+            });
+        });
+
+        // Submit 버튼 처리.
+        $("#submitBtn").on("click", function(e) {
+            e.preventDefault();
+
+            // 초기화.
+            var usrEmail = "";
+            // 회원등급 취득.
+            var userAuthLevel = $("#usrAuthLvl option:selected").val();
+
+            // 고객 아이디 체크
+            if($("#usrId").val() == null || $("#usrId").val() == "") {
+                alert("고객 아이디를 입력하여 주세요.");
+                $("#usrId").focus();
+                return false;
+            }
+            // 고객 아이디 체크
+            if($("#usrId").val() == null || $("#usrId").val() == "") {
+                alert("고객 아이디를 입력하여 주세요.");
+                $("#usrId").focus();
+                return false;
+            }
+
+            // 고객 비밀번호 체크
+            if($("#usrPwd").val() == null || $("#usrPwd").val() == "") {
+                alert("고객 비밀번호를 입력하여 주세요.");
+                $("#usrPwd").focus();
+                return false;
+            }
+
+            // 휴대폰 체크.
+            if($("#usrCellNo1").val() == null || $("#usrCellNo1").val() == "") {
+                alert("휴대폰 번호 앞자리를 선택하여 주세요.");
+                $("#usrCellNo1").focus();
+                return false;
+            }
+            if($("#usrCellNo2").val() == null || $("#usrCellNo2").val() == "") {
+                alert("휴대폰 번호 두번째 자리를 입력하여 주세요.");
+                $("#usrCellNo2").focus();
+                return false;
+            }
+            if($("#usrCellNo3").val() == null || $("#usrCellNo3").val() == "") {
+                alert("휴대폰 번호 세번째 자리를 입력하여 주세요.");
+                $("#usrCellNo3").focus();
+                return false;
+            }
+            // 이메일 체크.
+            if($("#usrEmail").val() == null || $("#usrEmail").val() == "") {
+                alert("고객 이메일을 입력하여 주세요.");
+                $("#usrEmail").focus();
+                return false;
+            } else if($.trim($("#usrEmail").val()) != "" ) {
+                if(!emailRegExp.test($("#usrEmail").val())) {
+                    alert("올바른 이메일이 아닙니다. 다시 입력하여 주세요.");
+                    $("#usrEmail").focus();
+                    return false;
+                }
+            }
+            // 회원등급 값 체크
+            if(userAuthLevel==null || userAuthLevel=="") {
+                alert("회원등급을 선택하여 주세요");
+                $("#usrAuthLvl").focus();
+                return false;
+            }
+
+            var usrCellNo = $.trim($("#usrCellNo1").val()) + "-" + $.trim($("#usrCellNo2").val()) + "-" + $.trim($("#usrCellNo3").val());
+            // 휴대폰 전화 번호 형식 체크.
+            if(!cellNoRegExp.test(usrCellNo)) {
+                alert("휴대폰 번호 형식이 올바르지 않습니다.\n확인하고 다시 입력하여 주세요.");
+                $("#usrCellNo1").focus();
+                return false;
+            }
+            // JSON 값 셋팅.
+            var dataVals = {
+                usrNo : $.trim($("#usrNo").val()),
+                usrId : $.trim($("#usrId").val()),
+                usrPwd : $.trim($("#usrPwd").val()),
+                usrName : $.trim($("#usrName").val()),
+                usrEmail : $.trim($("#usrEmail").val()),
+                usrCellNo : usrCellNo,
+                usrCellNo1 : $.trim($("#usrCellNo1").val()),
+                usrCellNo2 : $.trim($("#usrCellNo2").val()),
+                usrCellNo3 : $.trim($("#usrCellNo3").val()),
+                usrAuthLvl : userAuthLevel
+            };
+            // 전송 처리.
+            $.ajax({
+                url: "/admin/manager/edit",
+                type: "post",
+                dataType: "json",
+                data: dataVals,
+                success: function (data) {
+                    //console.log(">>> data = " + data.result);
+                    if(data.result=="OK") {
+                        alert("저장처리되었습니다.");
+                        location.href = "/admin/manager";
+                    }
+                },
+                error: function (err) {
+                    alert("errCode : " + err);
+                }
+            });
+        });
+        // 취소 버튼 이벤트 처리.
+        $("#cancelBtn").on("click", function() {
+            location.href = "/admin/manager";
+        });
+    });
+    // 다음 우편번호 검색 창 호출 함수.
+    function execDaumPostcode(no) {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+                // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+                // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                var fullAddr = ''; // 최종 주소 변수
+                var extraAddr = ''; // 조합형 주소 변수
+
+                // 사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                    fullAddr = data.roadAddress;
+
+                } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                    fullAddr = data.jibunAddress;
+                }
+
+                // 사용자가 선택한 주소가 도로명 타입일때 조합한다.
+                if(data.userSelectedType === 'R'){
+                    //법정동명이 있을 경우 추가한다.
+                    if(data.bname !== ''){
+                        extraAddr += data.bname;
+                    }
+                    // 건물명이 있을 경우 추가한다.
+                    if(data.buildingName !== ''){
+                        extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                    }
+                    // 조합형주소의 유무에 따라 양쪽에 괄호를 추가하여 최종 주소를 만든다.
+                    fullAddr += (extraAddr !== '' ? ' ('+ extraAddr +')' : '');
+                }
+
+                if(no=="1") {
+                    // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                    document.getElementById('usrPostNo').value = data.zonecode; //5자리 새우편번호 사용
+                    document.getElementById('usrAddr1').value = fullAddr;
+                    // 커서를 상세주소 필드로 이동한다.
+                    document.getElementById('usrAddr2').focus();
+                }
+                if(no=="2") {
+                    // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                    document.getElementById('usrCompPostNo').value = data.zonecode; //5자리 새우편번호 사용
+                    document.getElementById('usrCompAddr1').value = fullAddr;
+                    // 커서를 상세주소 필드로 이동한다.
+                    document.getElementById('usrCompAddr2').focus();
+                }
+
+            }
+        }).open();
+    }
+</script>
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">회원관리 화면</h1>
+        </div>
+    </div>
+    <div>
+        <p><span class="mark_blue">*</span> 각 입력란에 맞추어서 입력해주세요.</p>
+        <form name='frm' id="frm" class="form-horizontal">
+            <div class="form-group form-group-sm form-inline">
+                <label class="col-sm-2 control-label" for="usrNo"><span class="mark_red">*</span> 관리자 번호:</label>
+                <div class="col-sm-10">
+                    <input type="text" id="usrNo" name="usrNo" class="form-control" size="20" value="<%=members.no !=null ? members.no : ''%>" readonly/>
+                </div>
+            </div>
+            <div class="form-group form-group-sm form-inline">
+                <label class="col-sm-2 control-label" for="usrName"><span class="mark_red">*</span> 고객 이름:</label>
+                <div class="col-sm-10">
+                    <input type="text" id="usrName" name="usrName" class="form-control" size="20" maxlength="12" value="<%=members.name !=null ? members.name : ''%>"/>
+                </div>
+            </div>
+            <div class="form-group form-group-sm form-inline">
+                <label class="col-sm-2 control-label" for="usrId"><span class="mark_red">*</span> 고객 id:</label>
+                <div class="col-sm-10">
+                    <input type="text" id="usrId" name="usrId" class="form-control" size="20" maxlength="12" value="<%=members.id !=null ? members.id : ''%>"/>
+                    <!--
+                    <input type="button" id="idChkBtn" name="idChkBtn" class="form-control" value="중복체크"/>
+                    //-->
+                </div>
+            </div>
+            <div class="form-group form-group-sm form-inline">
+                <label class="col-sm-2 control-label" for="usrPwd"><span class="mark_red">*</span> 고객 비밀번호:</label>
+                <div class="col-sm-10">
+                    <input type="password" id="usrPwd" name="usrPwd" class="form-control" size="20" maxlength="12" value="<%=members.pwd !=null ? members.pwd : ''%>"/>
+                    <span>* 영문 대소문자/숫자/특수문자를 혼용하여 6~16자</span>
+                </div>
+            </div>
+            <div class="form-group form-group-sm form-inline">
+                <label class="col-sm-2 control-label" for="usrCellNo"><span class="mark_red">*</span> 휴대폰 :</label>
+                <div class="col-sm-10">
+                    <input type="text" name='usrCellNo1' id="usrCellNo1"  class="form-control" value="<%=members.cellno1 !=null ? members.cellno1 : ''%>" size="4" maxlength="4" />
+                    -
+                    <input type="text" name='usrCellNo2' id="usrCellNo2"  class="form-control" value="<%=members.cellno2 !=null ? members.cellno2 : ''%>" size="4" maxlength="4" />
+                    -
+                    <input type="text" name="usrCellNo3" id="usrCellNo3"  class="form-control" value="<%=members.cellno3 !=null ? members.cellno3 : ''%>" size="4" maxlength="4" />
+                </div>
+            </div>
+            <div class="form-group form-group-sm form-inline">
+                <label class="col-sm-2 control-label" for="usrEmail"><span class="mark_red">*</span> 이메일 :</label>
+                <div class="col-sm-10">
+                    <input type="text" name="usrEmail" id="usrEmail" class="form-control" size="40" maxlength="50" value="<%=members.email !=null ? members.email : ''%>"  />
+                </div>
+            </div>
+            <div class="form-group form-group-sm form-inline">
+                <label class="col-sm-2 control-label" for="usrAuthLvl"><span class="mark_red">*</span> 회원등급 :</label>
+                <div class="col-sm-10">
+                    <select id="usrAuthLvl" name="usrAuthLvl" class="form-control">
+                        <option value="">선택하여주세요.</option>
+                        <option value="000" <% if(members.level=="000") { %> selected <% }%>>시스템 관리자</option>
+                        <option value="001" <% if(members.level=="001") { %> selected <% }%>>최고관리자</option>
+                        <option value="001" <% if(members.level=="002") { %> selected <% }%>>관리자</option>
+                    </select>
+                </div>
+            </div>
+            <div class="text-right">
+                <input type="button" id="submitBtn" name="submitBtn" class="btn btn-default" value="확인" />
+                <input type="button" id="cancelBtn" name="cancelBtn" class="btn btn-default" value="취소" />
+            </div>
+        </form>
+    </div>
+</div>

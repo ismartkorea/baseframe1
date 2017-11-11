@@ -1,0 +1,251 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>ADPAY-에이디페이</title>
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+    <meta name="viewport" content="width=device-width" />
+
+    <link rel = "shortcut icon" href = "../images/favicon.ico">
+
+    <!-- Bootstrap  -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="/css/animate.css">
+
+    <!-- Theme style  -->
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Modernizr JS -->
+    <script src="/js/modernizr-2.6.2.min.js"></script>
+    <!-- FOR IE9 below -->
+    <!--[if lt IE 9]>
+    <script src="/js/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+<div class="adpay-loader"></div>
+<% include include/nav.ejs %>
+
+<div class="body-wrap">
+
+    <!--베스트 상품 목록 시작-->
+    <div id="product-page" class="bg">
+        <div class="container">
+            <div class="product-list-main">
+
+                <!--베스트 구글게임 시작-->
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3><span class="orange"><img src="/images/best.png" alt="베스트 구글게임"></span> 베스트 구글게임</h3>
+                    </div>
+<%
+    var num1 = 1;
+    if(rList1.length > 0) {
+        rList1.forEach(function(item1, index) {
+            if(index == 0) {
+%>
+                            <div class="col-md-3 col-xs-12 thumb-1st">
+                                <a href="/purchase/<%=item1.pCode%>/<%=item1.pUniqCode%>">
+                                    <img src="/images/product/<%=item1.pImage%>">
+                                </a>
+                                <div class="best-tag">1</div>
+                                <p><span class="red">1위</span><%=item1.pNm%></p>
+                            </div>
+
+                            <div class="col-md-9 col-xs-12 thumb-best-list">
+                                <div class="col-md-12">
+
+<%
+            }
+            if(index > 0) {
+                num1 = num1 +1;
+%>
+                            <div class="col-md-2 col-sm-4 col-xs-6 thumb">
+                                <a href="/purchase/<%=item1.pCode%>/<%=item1.pUniqCode%>">
+                                    <img src="/images/product/<%=item1.pImage%>">
+                                </a>
+                                <p><span class="red"><%=num1%>위</span><%=item1.pNm%></p>
+                                <%if(num1 <= 7) {%><div class="best-tag"><%=num1%></div><%}%>
+                            </div>
+<%
+            }
+        });
+     }
+%>
+                        </div>
+                    </div>
+
+                </div><!--row-->
+                <!--베스트 구글게임 끝-->
+
+                <!--베스트 카카오게임 시작-->
+                <div class="row mt30">
+                    <div class="col-md-12">
+                        <h3><span class="orange"><img src="/images/best.png" alt="베스트 카카오게임"></span> 베스트 카카오게임</h3>
+                    </div>
+<%
+    var num2 = 1;
+    if(rList2.length > 0) {
+        rList2.forEach(function(item2, index) {
+            if(index == 0) {
+%>
+                    <div class="col-md-3 col-xs-12 thumb-1st">
+                        <a href="/purchase/<%=item2.pCode%>/<%=item2.pUniqCode%>">
+                            <img src="/images/product/<%=item2.pImage%>">
+                        </a>
+                            <div class="best-tag">1</div>
+                        <p><span class="red">1위</span><%=item2.pNm%></p>
+                    </div>
+
+                    <div class="col-md-9 col-xs-12 thumb-best-list">
+                        <div class="col-md-12">
+<%
+            }
+            if(index > 0) {
+                num2 = num2 +1;
+%>
+                            <div class="col-md-2 col-sm-4 col-xs-6 thumb">
+                                <a href="/purchase/<%=item2.pCode%>/<%=item2.pUniqCode%>">
+                                    <img src="/images/product/<%=item2.pImage%>">
+                                </a>
+                                <p><span class="red"><%=num2%>위</span><%=item2.pNm%></p>
+                                <%if(num2 <= 7) {%><div class="best-tag"><%=num2%></div><%}%>
+                            </div>
+<%
+            }
+        });
+    }
+%>
+                        </div><!--col-md-12-->
+                    </div><!--col-md-9-->
+                </div><!--row-->
+                <!--베스트 카카오게임 끝-->
+            </div><!--prodcut-list-main-->
+        </div><!--container-->
+    </div><!--product-page-->
+    <!--베스트 상품 목록 끝-->
+
+    <!--배너시작-->
+    <!--배너 이미지 사이즈는 400x200px -->
+    <div id="product-page" class="bg-grey">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 col-xs-6">
+                    <div class="banner banner-1"><img src="images/banner-1.jpg" /></div>
+                </div>
+
+                <div class="col-md-4 col-xs-6">
+                    <div class="banner banner-2"><img src="images/banner-2.jpg" /></div>
+                </div>
+
+                <div class="col-md-4 col-xs-12 banner-info" style="background-image: url(../images/banner-adpay.jpg);">
+                    <div class="banking-info">
+                        <p>농협: 301-0218-5092-81</p>
+                        <p>국민: 592201-01-655279</p>
+                        <p class="red">예금주: 주식회사 에이디커뮤니케이션</p>
+                    </div>
+                </div>
+            </div><!--row-->
+        </div><!--container-->
+    </div><!--product-page-->
+    <!--배너 끝-->
+
+    <!--최근게시물 게시판 시작-->
+    <div class="container mt20 mb40">
+        <div class="row">
+            <div class="col-md-4">
+                <ul class="product-list-main">
+                    <h4>공지사항<a href="/announce"><span class="more">+ 전체보기</span></a></h4>
+<%
+    if(rList3.length > 0) {
+        rList3.forEach(function(item3) {
+%>
+                    <li><a href="/announce/view/<%=item3.no%>"><%=item3.title%></a>
+                        <span class="btn btn-xs-grey"><%=item3.date%></span>
+                    </li>
+<%
+        });
+    } else {
+%>
+                    <li>NO DATA</li>
+<%
+    }
+%>
+                </ul>
+            </div>
+
+            <div class="col-md-4">
+                <ul class="product-list-main">
+                    <h4>구매후기<a href="/review"><span class="more">+ 전체보기</span></a></h4>
+<%
+    if(rList4.length > 0) {
+        rList4.forEach(function(item4) {
+%>
+                        <li><a href="/review/view/<%=item4.no%>"><%=item4.title%></a>
+                    <span class="btn btn-xs-grey"><%=item4.date%></span></li>
+<%
+        });
+    } else {
+%>
+                        <li>NO DATA</li>
+<%
+    }
+%>
+                </ul>
+            </div>
+
+            <div class="col-md-4">
+                <ul class="product-list-main">
+                    <h4>이벤트<a href="/event"><span class="more">+ 전체보기</span></a></h4>
+<%
+    if(rList5.length > 0) {
+        rList5.forEach(function(item5) {
+%>
+                    <li><a href="/review/view/<%=item5.no%>"><%=item5.title%></a>
+                    <span class="btn btn-xs-grey"><%=item5.date%></span></li>
+<%
+        });
+    } else {
+%>
+                    <li>NO DATA</li>
+<%
+    }
+%>
+                </ul>
+            </div>
+
+        </div><!--row-->
+    </div><!--container-->
+    <!--최근게시물 게시판 끝-->
+
+</div><!--body-wrap-->
+
+<% include include/footer.ejs %>
+
+</div><!--include된 nav페이지에 div id="page" 태그닫음-->
+
+<div class="gototop js-top">
+    <a href="#" class="js-gotop"><img src="../images/arrow-up.png" /></a>
+</div>
+
+
+<!-- jQuery -->
+<script src="/js/jquery.min.js"></script>
+
+<!-- jQuery Easing -->
+<script src="/js/jquery.easing.1.3.js"></script>
+<!-- Bootstrap -->
+<script src="/js/bootstrap.min.js"></script>
+<!-- Waypoints -->
+<script src="/js/jquery.waypoints.min.js"></script>
+<!-- loader -->
+<script src="/js/jquery.countTo.js"></script>
+<!-- Main -->
+<script src="/js/main.js"></script>
+</body>
+</html>
+

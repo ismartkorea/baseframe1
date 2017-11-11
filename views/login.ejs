@@ -1,0 +1,117 @@
+<% layout('./layout') -%>
+<form id="frm" name="frm" method="post">
+    <div id="start" class="bg">
+        <div id="login" class="container">
+            <legend>회원로그인</legend>
+            <div class="form-wrap">
+                <div class="tab">
+                    <ul class="tab-menu">
+                        <li class="gtco-first"><i class="fa fa-user" aria-hidden="true"></i> 회원로그인</li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div class="tab-content-inner">
+
+                            <div class="row">
+                                <!--<div class="col-md-12 pd-mg mb15">
+                                    <!--<label for="selectuser">사용자구분</label><br>-->
+                                <!--<input type="radio" name="user" title="일반사용자" value="person" checked><label><span><span></span></span>일반사용자</label><br>
+                                <input type="radio" name="user" title="정비사" value="repair"><label><span><span></span></span>개인정비사</label>
+                                <input type="radio" name="user" title="정비소" value="center"><label><span><span></span></span>정비소</label>
+                                <input type="radio" name="user" title="부품업체" value="part"><label><span><span></span></span>부품업체</label>
+                                <input type="radio" name="user" title="보험사정인" value="insurance"><label><span><span></span></span>보험사정인</label>
+                           </div>-->
+
+
+                                <div class="col-md-8 text-left mb15">
+                                    <label for="username"><input type="text" class="form-control mb5" id="usrId" name="usrId" placeholder="아이디"></label>
+                                    <label for="password"><input type="password" class="form-control" id="usrPwd" name="usrPwd" placeholder="비밀번호"></label>
+                                </div>
+
+                                <div class="col-md-4 text-left font14">
+                                    <input type="submit" id="submitBtn" name="submitBtn" class="btn btn-warning btn-login" value="로그인"/>
+                                    <span class="saveid"><input id="saveId" type="checkbox" name="saveId" checked="checked"><label for="saveId"><span></span>아이디저장</label></span>
+                                </div>
+
+
+                                <div class="col-md-12 login-footer">
+                                    <span class="mr20"><a href="/login/findId"><i class="fa fa-search" aria-hidden="true"></i> 아이디/비밀번호찾기</a></span>
+                                    <span class="mr15"><a href="/signup"><i class="fa fa-user" aria-hidden="true"></i> 회원가입</a></span>
+
+                                </div>
+
+
+                            </div> <!--row-->
+                        </div><!--tab-content-inner-->
+                    </div><!--tab-content-->
+
+                </div><!--tab-->
+            </div><!--form-wrap-->
+
+        </div><!--fh5co-header-->
+    </div><!--start-->
+</form>
+<!-- script -->
+<script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>
+<script type="text/javascript">
+    $(function() {
+        // 포커스 셋팅.
+        $("#usrId").focus();
+
+
+        // 로그인 처리.
+        $("#submitBtn").on("click", function(e) {
+            e.preventDefault();
+
+            var usrId = $.trim($("#usrId").val());
+            var usrPwd = $.trim($("#usrPwd").val());
+
+            if(usrId == "") {
+                alert("로그인 아이디를 입력하세요");
+                $("#usrId").focus();
+
+                return false;
+            }
+
+            if(usrPwd == "") {
+                alert("로그인 비밀번호를 입력하세요");
+                $("#usrPwd").focus();
+
+                return false;
+            }
+
+            // 값 저장 처리.
+             var dataVals = {
+                usrId : $.trim($("#usrId").val()),
+                usrPwd : $.trim($("#usrPwd").val())
+             };
+             // 전송 처리.
+             $.ajax({
+                 url: "/login/process",
+                 type: "post",
+                 dataType: "json",
+                 data: dataVals,
+                 success: function (data) {
+                     console.log(">>> data = " + data.result);
+                     if(data.result=="OK") {
+                         location.href = "/";
+                     } else if(data.result=="fail") {
+                         alert('해당 아이디/비밀번호가 없습니다.');
+                         location.href = "/login";
+                     }
+                },
+                error: function (err) {
+                    alert("errCode : " + err.message);
+                }
+             });
+
+            /*
+            $("#frm").attr("method", "post");
+            $("#frm").attr("action", "/login/process");
+
+            $("#frm").submit();
+            */
+
+        });
+    });
+</script>

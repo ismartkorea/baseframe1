@@ -1,0 +1,45 @@
+<% layout('../layout') -%>
+<form id="pFrm" name="pFrm" method="post">
+    <input type="hidden" id="pNo" name="pNo" value="<%=result.pNo%>"/>
+    <input type="hidden" id="pCode" name="pCode" value="<%=result.pCode%>"/>
+<div class="col-md-9 col-xs-12 thumb-best-list">
+    <div class="col-md-12">
+        <div class="col-md-2 col-sm-4 col-xs-6 thumb">
+            <img src="/images/product/<%=result.pImage%>" width="200px" height="200px">
+            <p><%=result.pNm%> <br/> <%=result.pPrice%> 원 <br/> <%-result.pDesc%></p>
+            <div><a href="#" id="addCart">장바구니 넣기</a></div>
+        </div>
+    </div>
+</div><!--row-->
+</form>
+<script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>
+<script type="text/javascript">
+    $(function() {
+
+        $("#addCart").on("click", function(e) {
+           e.preventDefault();
+
+            var pNo = $.trim($("#pNo").val());
+            var pCode = $.trim($("#pCode").val());
+            // ajax 처리.
+            $.ajax({
+                type : "post",
+                url : "/cart",
+                dataType : "json",
+                data : {"pNo" : pNo, "pCode" : pCode},
+                success : function(data) {
+                    if(data.result == "OK") {
+                        alert("장바구니에 추가되었습니다.");
+                    } else if(data.result == "error") {
+                        alert("서버 장애로 저장처리되지 못했습니다.");
+                    }
+                },
+                error : function(request, status, error) {
+                    console.log("Code :  " + request.status + "\n" +
+                            "message : " + request.responseText + "\n" +
+                            "error : " + error);
+                }
+            });
+        });
+    });
+</script>
