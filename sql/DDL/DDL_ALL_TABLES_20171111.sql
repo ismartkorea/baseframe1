@@ -1,13 +1,11 @@
 use `adpay`;
 
-show tables;
-
-desc tbl_user;
-
-desc tbl_admin;
-
-desc tbl_commcd;
-
+/*
+ * base1용 DB
+ */
+grant all privileges on base1.* to base1@localhost identified by 'base19123';
+create database `base1`;
+flush privileges;
 
 /*
   결제 상세 정보 테이블 (신규)
@@ -402,46 +400,51 @@ drop table if exists `tbl_product`;
 CREATE TABLE if not exists `tbl_product` (
   `p_no` int(11) NOT NULL AUTO_INCREMENT COMMENT '상품번호',
   `p_code` varchar(40) NOT NULL COMMENT '상품코드',
-  `p_div` char(1) NOT NULL COMMENT '상품구분(메인:M,옵션:O)',
+  `p_pair_code_yn` varchar(40) DEFAULT 'N' COMMENT '상품쌍코드여부(하위상품코드)',
+  `p_pair_code` varchar(40) DEFAULT NULL COMMENT '상품쌍코드(연관상품코드)',
+  `p_div` char(1) DEFAULT NULL COMMENT '상품구분(메인:M,옵션:O)',
+  `p_opt_btn_dis_yn` char(1) DEFAULT 'Y' COMMENT '옵션상품버튼표시여부',
   `p_type` char(3) DEFAULT NULL COMMENT '상품타입(서비스:srv,패키지:pkg)',
+  `p_gubun` varchar(10) DEFAULT NULL COMMENT '상품서비스구분(Assist Pro, JT Lab)',
   `p_nm` varchar(60) NOT NULL COMMENT '상품명',
   `p_price` int(11) NOT NULL COMMENT '상품가격',
-  `p_disc_price` int(11) NULL COMMENT '상품할인가격',
-  `p_disc_percent` int(11) NULL COMMENT '상품할인퍼센트',
   `p_desc` text COMMENT '상품(서비스) 설명',
   `p_display_yn` char(1) DEFAULT 'Y' COMMENT '상품표시yn',
   `p_image` varchar(80) DEFAULT NULL COMMENT ' 상품대표이미지',
-  `p_opt_cnt` int(3) DEFAULT NULL COMMENT '옵션갯수',
+  `p_uniq_code` varchar(40) DEFAULT NULL COMMENT '상품고유코드',
+  `opt_cnt` int(3) DEFAULT NULL COMMENT '옵션갯수',
+  `sort_no` varchar(10) DEFAULT NULL COMMENT '정렬번호',
   `p_gubun_cd` char(3) DEFAULT NULL COMMENT '서비스구분코드',
   `p_smmry` varchar(100) DEFAULT NULL COMMENT '상품설명',
   `p_image_url` varchar(100) DEFAULT NULL COMMENT '상품이미지URL',
-  `p_count` int(3) DEFAULT '0' COMMENT '상품갯수',
-  `p_stock_count` int(3) DEFAULT '0' COMMENT '상품재고수량',
-  `p_maked_date` date DEFAULT NULL COMMENT '상품제조일자',
-  `p_launch_date` date DEFAULT NULL COMMENT '상품출시일자',
-  `p_brand_nm` varchar(20) DEFAULT NULL COMMENT '상품브랜드명',
-  `p_model_nm` varchar(60) DEFAULT NULL COMMENT '상품모델명',
-  `p_origin_country` varchar(15) DEFAULT NULL COMMENT '원산지',
-  `p_production_company` varchar(20) DEFAULT NULL COMMENT '제조사',
-  `p_tax_level_cd` char(4) DEFAULT NULL COMMENT '세금등급(과세/면세/영세)',
-  `p_tax_amount` int(2) DEFAULT NULL COMMENT '세액',
-  `p_shipping_set` char(4) DEFAULT NULL COMMENT '배송료설정(무료/착불)',
-  `p_shipping_price` int(11) DEFAULT NULL COMMENT '배송료',
-  `p_pay_sign` text COMMENT '결제안내',
-  `p_shipping_sign` text COMMENT '배송안내',
-  `p_qna_sign` text COMMENT '서비스문의안내',
-  `p_count_use_yn` char(1) DEFAULT 'N' COMMENT '상품갯수표시여부',
   `display_order_no` varchar(2) DEFAULT NULL COMMENT '상품전시표시번호',
   `category1` varchar(40) DEFAULT NULL COMMENT '카테고리구분',
   `category2` varchar(40) DEFAULT NULL COMMENT '카테고리구분',
   `category3` varchar(40) DEFAULT NULL COMMENT '카테고리구분3',
-  `set_best_yn` char(1) DEFAULT 'N' COMMENT '베스트상품셋팅YN',
-  `best_no` varchar(3) DEFAULT NULL COMMENT '베스트상품정렬번호',
-  `sort_no` varchar(10) DEFAULT NULL COMMENT '정렬번호',
-  `insert_dt` datetime NULL COMMENT '작성날짜',
-  `insert_usr` varchar(12) NULL COMMENT '작성자명',
-  `update_dt` datetime NULL COMMENT '수정날짜',
-  `update_usr` varchar(12) NULL COMMENT '수정자명',
+  `p_disc_price` int(11) DEFAULT NULL COMMENT '할인가격',
+  `p_disc_percent` int(11) DEFAULT NULL COMMENT '할인율',
+  `p_count` int(3) DEFAULT NULL COMMENT '상품갯수',
+  `p_stock_count` int(3) DEFAULT NULL COMMENT '상품재고수',
+  `p_maked_date` date DEFAULT NULL COMMENT '제조일',
+  `p_launch_date` date DEFAULT NULL COMMENT '출고일',
+  `p_brand_nm` varchar(20) DEFAULT NULL COMMENT '브랜드명',
+  `p_model_nm` varchar(60) DEFAULT NULL COMMENT '모델명',
+  `p_origin_country` varchar(15) DEFAULT NULL COMMENT '원산지명',
+  `p_production_company` varchar(20) DEFAULT NULL COMMENT '회사명',
+  `p_tax_level_cd` char(4) DEFAULT NULL COMMENT '세금율코드',
+  `p_tax_amount` int(2) DEFAULT NULL COMMENT '세율금액',
+  `p_shipping_set` char(4) DEFAULT NULL COMMENT '배송설정',
+  `p_shipping_price` int(11) DEFAULT NULL COMMENT '배송비',
+  `p_pay_sign` text COMMENT '지불',
+  `p_shipping_sign` text COMMENT '배송',
+  `p_qna_sign` text COMMENT 'qna',
+  `p_count_use_yn` char(1) DEFAULT NULL COMMENT '갯수사용여부',
+  `set_best_yn` char(1) DEFAULT 'N' COMMENT '베스트상품여부',
+  `best_no` varchar(3) DEFAULT NULL COMMENT '베스트번호',
+  `insert_dt` datetime NOT NULL COMMENT '작성날짜',
+  `insert_usr` varchar(12) NOT NULL COMMENT '작성자명',
+  `update_dt` datetime NOT NULL COMMENT '수정날짜',
+  `update_usr` varchar(12) NOT NULL COMMENT '수정자명',
   PRIMARY KEY (`p_no`)
 ) DEFAULT CHARSET=utf8 COMMENT='상품정보테이블(신)'
 ;
