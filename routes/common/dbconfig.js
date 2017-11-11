@@ -5,9 +5,9 @@
 var mysql = {
     host: 'localhost',
     port: 3306,
-    database : 'adpay',
-    user: 'adpay',
-    password: '0o0o!!!',
+    database : 'base1',
+    user: 'base1',
+    password: 'base19123',
     insecureAuth: true,
     multipleStatements: true
 };

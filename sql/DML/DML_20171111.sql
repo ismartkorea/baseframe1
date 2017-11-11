@@ -1,5 +1,13 @@
 use adpay;
 
+/*
+ * base1용 DB
+ */
+grant all privileges on base1.* to base1@localhost identified by 'base19123';
+create database `base1`;
+flush privileges;
+
+
 show tables;
 
 desc `tbl_pay`;
