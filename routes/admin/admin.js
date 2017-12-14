@@ -44,7 +44,7 @@ router.get('/', function(req, res) {
                     console.log("err : " + err.message);
                 } else {
                     res.render('./admin/index', {
-                        title : 'ADPAY 관리자 화면',
+                        title : '관리자 화면',
                         result0 : results[0][0],
                         result1: results[1][0],
                         result2: results[2][0],
@@ -190,7 +190,7 @@ router.get('/dashboard', function(req, res) {
                     console.log("err : " + err.message);
                 } else {
                     res.render('./admin/dashboard', {
-                        title : 'ADPAY 관리자 화면',
+                        title : '관리자 화면',
                         result0 : results[0][0],
                         result1: results[1][0],
                         result2: results[2][0],

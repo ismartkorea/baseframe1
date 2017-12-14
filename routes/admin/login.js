@@ -35,7 +35,7 @@ router.get('/', function(req, res) {
     if(ss.usrNo) {
         res.redirect('/admin');
     } else {
-        res.render('./admin/login', {'title': 'ADPAY 관리자 로그인 화면', 'message' : '', 'result' : ss});
+        res.render('./admin/login', {'title': '관리자 로그인 화면', 'message' : '', 'result' : ss});
     }
 
 });
