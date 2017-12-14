@@ -1,0 +1,51 @@
+<% layout('../layout') -%>
+<script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>
+<div id="start">
+    <div class="container">
+        <!-- 타이틀 시작 -->
+        <div class="col-md-12 animate-box">
+            <h3 class="ubar">상품권매입</h3>
+        </div>
+
+                    <div class="col-md-12 animate-box mb40">
+                        <form id="frm" name="frm">
+                            <table border="0" cellspacing="0" width="100%" class="table_style3">
+                                <thead>
+                                <tr>
+                                    <th>번호</th>
+                                    <th>제목</th>
+                                    <th>날짜</th>
+                                    <th>조회수</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+<%
+if(rList.length > 0) {
+    rList.forEach(function(item, index) {
+%>
+                                <tr>
+                                    <td><%=item.no%></td>
+                                    <td><a href="/review/view/<%=item.no%>"><%=item.title%></a></td>
+                                    <td><%=item.date%></td>
+                                    <td><%=item.count%></td>
+                                </tr>
+<%
+    })
+} else {
+%>
+                                <tr>
+                                    <td colspan="4" align="center">
+                                        No Data
+                                    </td>
+                                </tr>
+<%
+}
+%>
+                                </tbody>
+                            </table>
+                        </form>
+                    </div>
+                    <!--////---현재 리뷰 끝///////-->
+
+    </div>
+</div>

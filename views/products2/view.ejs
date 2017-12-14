@@ -1,0 +1,173 @@
+<% layout('../layout') -%>
+<form id="pFrm" name="pFrm" method="post">
+<input type="hidden" id="pNo" name="pNo" value="<%=result.pNo%>"/>
+<input type="hidden" id="pCode" name="pCode" value="<%=result.pCode%>"/>
+<div class="row product-detail bg-lightgrey">
+    <!--상품 이미지 -->
+    <div class="col-lg-4 col-md-3 col-sm-3 col-xs-12 col-detail">
+        <div class="thumb"><img src="/images/product/thumb/googlegame-02.jpg"></div>
+    </div>
+    <!--상품 이미지 끝-->
+
+    <!--상품 정보 및 옵션 선택-->
+    <div class="col-lg-4 col-md-4 col-sm-9 col-xs-12 col-detail">
+        <h3><%=result.pNm%></h3>
+        <dl>
+            <dt>할인가: <input type="text" id="pDiscPrice" name="pDiscPrice" class="orange size8" value="<%=result.pDiscPrice%>" readonly>원</dt>
+            <dd class="original">소비자가: <input type="text" id="pPrice" name="pPrice" class="orange size8" value="<%=result.pPrice%>" readonly>원</dd>
+            <dd>결제수단: 무통장입금</dd>
+            <dd>배송방법: 입금확인 후 SMS문자</dd>
+            <dd><span class="small black">* 문자로 발송 받은 상품번호가 노출 되지 않도록 주의 바랍니다.</span></dd>
+        </dl>
+        <!--
+        <p class="search-bar">
+            <select>
+                <option selected>필수선택</option>
+                <option>아데나큐브패키지</option>
+                <option>40000 다이아</option>
+                <option>50000 다이아</option>
+            </select>
+        </p>
+        -->
+    </div>
+    <!--상품 정보 및 옵션 선택 끝--->
+
+    <!--선택 상품 가격 및 수량 정정-->
+    <div class="col-lg-4 col-md-5 col-sm12 col-xs-12 col-detail">
+        <h4>선택상품/가격</h4>
+        <ul>
+            <li><%=result.pNm%> <input type="text" id="discPrice" name="discPrice" value="<%=result.pDiscPrice%>"/>
+                <div class="quantity">
+                    <input type="text" id="pCountNum" name="pCountNum" value="1" class="num" />
+                    <a href="#"><img src="/images/num_up.jpg" alt="수량증가하기" class="num_up"/></a>
+                    <a href="#"><img src="/images/num_down.jpg" alt="수량차감하기" class="num_down"/></a>
+                </div>
+            </li>
+        </ul>
+        <h5>총 결제금액(수량): <input type="text" id="pSumPrice" name="pSumPrice" class="price" value="" readonly/>원(<input type="text" id="pCount" name="pCount" value="" readonly/>개)</h5>
+        <input type="button" id="purchaseBtn" class="btn btn-grey" value="바로구매"><input type="button" id="addCart" class="btn btn-warning" value="장바구니">
+    </div>
+    <!--선택 상품 가격 및 수량 정정 끝-->
+
+</div><!--row-->
+
+
+    <!--상품 상세페이지 하단- 상세정보 시작-->
+    <div class="container">
+        <div class="row">
+            <div class="detail-page">상품정보가 있을때는 감싼 container부터가 살아있게 하고 상품상세페이지가 없을때는 container부터 안 보이게 </div>
+        </div>
+    </div>
+
+    <!--상품 상세페이지 하단- 상세정보 끝-->
+
+
+
+</form>
+<!--상품 상세 페이지 끝-->
+<script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>
+<script type="text/javascript">
+    $(function() {
+        // 초기 셋팅.
+        var pDiscPrice = $("#pDiscPrice").val() !=null ? $("#pDiscPrice").val() : 0;
+        var pCountNum = $("#pCountNum").val();
+        var payPrice = parseInt(pDiscPrice) * parseInt(pCountNum);
+        $("#pSumPrice").val(payPrice);
+        $("#pCount").val(pCountNum);
+
+        // 수량 계산 처리.
+        $("#pCountNum").on("keyup", function(e) {
+            e.preventDefault();
+
+            $("#pSumPrice").val(pDiscPrice * $("#pCountNum").val());
+            $("#pCount").val($("#pCountNum").val());
+        });
+
+        // 수량 버튼 이벤트 처리.
+        $('.num_up').click(function(){
+            if($("#pCount").val() >= 100) {
+                return false;
+            }
+
+            var n = $('.num_up').index(this);
+            var num = $(".num:eq("+n+")").val();
+            num = $(".num:eq("+n+")").val(num*1+1);
+            $("#pSumPrice").val(pDiscPrice * $("#pCountNum").val());
+            $("#pCount").val($("#pCountNum").val());
+        });
+        // 수량 버튼 이벤트 처리.
+        $('.num_down').click(function(){
+            if($("#pCount").val() <= 1) {
+                return false;
+            }
+
+            var n = $('.num_down').index(this);
+            var num = $(".num:eq("+n+")").val();
+            num = $(".num:eq("+n+")").val(num*1-1);
+            $("#pSumPrice").val(pDiscPrice * $("#pCountNum").val());
+            $("#pCount").val($("#pCountNum").val());
+        });
+        // 카트 저장 처리.
+        $("#addCart").on("click", function(e) {
+            e.preventDefault();
+
+            var pDiscPrice = $("#pDiscPrice").val() !=null ? $("#pDiscPrice").val() : 0;
+            var pCount = $("#pCountNum").val() !=null ? $("#pCountNum").val() : 0;
+            var pNo = $.trim($("#pNo").val());
+            var pCode = $.trim($("#pCode").val());
+            var pCount = $.trim($("#pCount").val());
+            var pSumPrice = pDiscPrice * pCount;
+
+            // ajax 처리.
+            $.ajax({
+                type : "post",
+                url : "/cart/save",
+                dataType : "json",
+                data : {"pNo" : pNo, "pCode" : pCode, "pCount" : pCount, "pSumPrice" : pSumPrice},
+                success : function(data) {
+                    if(data.result == "OK") {
+                        alert("장바구니에 추가되었습니다.");
+                    } else if(data.result == "error") {
+                        alert("서버 장애로 저장처리되지 못했습니다.");
+                    }
+                },
+                error : function(request, status, error) {
+                    console.log("Code :  " + request.status + "\n" +
+                            "message : " + request.responseText + "\n" +
+                            "error : " + error);
+                }
+            });
+        });
+
+        // 구매 처리.
+        $("#purchaseBtn").on("click", function(e) {
+            e.preventDefault();
+
+            var pNo = $.trim($("#pNo").val());
+            var pCode = $.trim($("#pCode").val());
+            var pCount = $.trim($("#pCount").val());
+            var pSumPrice = $.trim($("#pSumPrice").val());
+            var pDiscPrice = $.trim($("#pDiscPrice").val());
+
+            if(pCount <= 0) {
+                alert("구매수량은 최소 1개이상 되어야 합니다.");
+                $("#pCountNum").focus();
+
+                return false;
+            }
+
+            if(pSumPrice < pDiscPrice) {
+                alert("구매가격은 최소 "+ pDiscPrice + " 이상 되어야 합니다.");
+                $("#pCountNum").focus();
+
+                return false;
+            }
+
+            $("#pFrm").attr("method", "post");
+            $("#pFrm").attr("action", "/purchase/save");
+
+            $("#pFrm").submit();
+        });
+
+    });
+</script>

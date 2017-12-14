@@ -1,0 +1,185 @@
+<% layout('../layout') -%>
+<%
+// 콤마 붙이기
+function fnComma(num) {
+    var reg = /(^[+-]?\d+)(\d{3})/;
+    num += '';
+    while(reg.test(num)) {
+        num = num.replace(reg, '$1' + ',' + '$2');
+    }
+    return num;
+}
+// 콤마 제거
+function fnUnComma(num) {
+    if(num !=null) {
+        return (num.replace(/\,/g,""));
+    } else {
+        return num;
+    }
+
+}
+%>
+<div id="product-page" class="bg">
+    <div class="container">
+        <div class="product-list-main">
+
+
+            <!--베스트 구글기프트카드 시작-->
+            <div class="row">
+                <div class="col-md-12">
+                    <h3><span class="orange"><img src="/images/best.png" alt="베스트 구글기프트카드"></span> 아프리카TV별풍선</h3>
+                </div>
+<%
+    var num1 = 1;
+    if(rList1.length > 0) {
+        rList1.forEach(function(item1, index) {
+            if(index == 0) {
+%>
+                <div class="col-md-3 col-xs-12 thumb-1st">
+                    <a href="/purchase/<%=item1.pCode%>/<%=item1.pUniqCode%>">
+                        <img src="/images/product/<%=item1.pImage%>">
+                    </a>
+                    <div class="best-tag">1</div>
+                    <p><span class="red">1위</span><%=item1.pNm%></p>
+                </div>
+
+                <div class="col-md-9 col-xs-12 thumb-best-list">
+                    <div class="col-md-12">
+<%
+            }
+            if(index > 0) {
+                num1 = num1 +1;
+%>
+                        <div class="col-md-2 col-sm-4 col-xs-6 thumb">
+                            <a href="/purchase/<%=item1.pCode%>/<%=item1.pUniqCode%>">
+                                <img src="/images/product/<%=item1.pImage%>">
+                            </a>
+                            <p><span class="red"><%=num1%>위</span><%=item1.pNm%></p>
+                            <%if(num1 <= 7) {%><div class="best-tag"><%=num1%></div><%}%>
+                        </div>
+<%
+            }
+        });
+    } else {
+        for(var i=0; i < 4; i++) {
+%>
+                        <div class="col-md-3 col-xs-12 thumb-1st">
+                            <img src="/images/products-no.jpg">
+                            <p style="text-align: center;">상품준비중</p>
+                        </div>
+<%
+        }
+    }
+%>
+                    </div>
+                </div>
+
+            </div><!--row-->
+        </div><!--product-list-main-->
+    </div><!--container-->
+</div><!--product-page-->
+
+<div id="product-page">
+    <div class="container">
+        <div class="service-list">
+            <!--검색 시작-->
+            <div class="row">
+                <div class="col-md-12 col-sm-12 mb10 mt20 text-center">
+                    <h3 class="frame text-center">아프리카TV별풍선</h3>
+                </div>
+                <div class="col-md-12 col-sm-12 text-right search-bar">
+                    <form id="sForm" name="sForm" method="post">
+                        <select id="srchType1" name="srchType1">
+                            <option value="POP" <%if(srchType1=="POP") {%>selected<%}%>>인기상품순</option>
+                            <option value="LOW" <%if(srchType1=="LOW") {%>selected<%}%>>낮은가격순</option>
+                            <option value="HIGH" <%if(srchType1=="HIGH") {%>selected<%}%>>높은가격순</option>
+                            <option value="NEW" <%if(srchType1=="NEW") {%>selected<%}%>>최신상품순</option>
+                        </select>
+                        <select id="srchType2" name="srchType2">
+                            <option value="" <%if(srchType2=="") {%>selected<%}%>>가격대별보기</option>
+                            <option value="1" <%if(srchType2=="1") {%>selected<%}%>>1천원~1만원</option>
+                            <option value="3" <%if(srchType2=="3") {%>selected<%}%>>1만원~3만원</option>
+                            <option value="5" <%if(srchType2=="5") {%>selected<%}%>>3만원~5만원</option>
+                            <option value="10" <%if(srchType2=="10") {%>selected<%}%>>5만원~10만원</option>
+                            <option value="30" <%if(srchType2=="30") {%>selected<%}%>>10만원~30만원</option>
+                            <option value="50" <%if(srchType2=="50") {%>selected<%}%>>30만원~50만원</option>
+                        </select>
+                        <input type="button" id="srchBtn" name="srchBtn" class="btn btn-search" value="검색" />
+                        <span class="noborder">
+                            <select id="srchType3" name="srchType3">
+                                    <option value="pLOW" <%if(srchType3=="pLOW") {%>selected<%}%>> 낮은가격순</option>
+                                    <option value="pHIGH" <%if(srchType3=="pHIGH") {%>selected<%}%>>높은가격순</option>
+                            </select>
+                        </span>
+                    </form>
+                </div>
+            </div><!--row-->
+            <!--검색 끝-->
+
+
+            <!--상품 리스트 시작-->
+            <div class="row mt10">
+<%
+    if(rList.length > 0) {
+        rList.forEach(function(item, idx) {
+%>
+                <div class="col-md-3 col-sm-4 col-xs-6 animate-box">
+                    <div class="feature-center">
+                        <div class="thumb">
+                            <a href="/purchase/<%=item.pCode%>/<%=item.pUniqCode%>"><img src="/images/product/<%=item.pImage%>"></a>
+                            <h3><%=item.pNm%></h3>
+<% if(parseInt(item.pPrice) > 0 && parseInt(item.pDiscPrice) > 0) { %>
+                            <p class="original">가격: <%=fnComma(item.pPrice)%> 원</p>
+                            <p>할인가: <span class="orange"><%=fnComma(item.pDiscPrice)%></span> 원</p>
+<% } %>
+                        </div>
+                    </div>
+                </div>
+<%
+        });
+    } else {
+        for(var j=0; j < 8; j++) {
+%>
+                <div class="col-md-3 col-sm-4 col-xs-6 animate-box">
+                    <div class="feature-center">
+                        <div class="thumb">
+                            <img src="/images/products-no.jpg"></a>
+                            <h3>상품준비중</h3>
+                        </div>
+                    </div>
+                </div>
+<%
+        }
+    }
+%>
+            </div><!--row-->
+
+        </div><!--service-list-->
+        <!--상품목록 끝-->
+    </div><!--container-->
+</div><!--product-page-->
+
+<script type="text/javascript" src="/js/jquery-1.11.3.min.js"></script>
+<script type="text/javascript">
+    $(function() {
+
+        // 검색 버튼 이벤트 처리.
+        $("#srchBtn").on("click", function(e) {
+            e.preventDefault();
+
+            $("#sForm").attr("method", "post");
+            $("#sForm").attr("action", "/afreeca/search");
+
+            $("#sForm").submit();
+        });
+        // 가격 검색 버튼 이벤트 처리.
+        $("#srchType3").on("change", function() {
+
+            $("#sForm").attr("method", "post");
+            $("#sForm").attr("action", "/afreeca/search");
+
+            $("#sForm").submit();
+        });
+
+    });
+</script>
